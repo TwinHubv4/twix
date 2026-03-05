@@ -1,0 +1,202 @@
+local player = game.Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "TwixHub_Locked"
+gui.ResetOnSpawn = false
+gui.Parent = player.PlayerGui
+
+-- MAIN WINDOW
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 450, 0, 300)
+mainFrame.Position = UDim2.new(0.5, -225, 0.5, -150)
+mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = gui
+
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 8)
+mainCorner.Parent = mainFrame
+
+-- TOP BAR (Dragging Handle)
+local topBar = Instance.new("Frame")
+topBar.Name = "TopBar"
+topBar.Size = UDim2.new(1, 0, 0, 40)
+topBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+topBar.BorderSizePixel = 0
+topBar.Parent = mainFrame
+
+local topBarCorner = Instance.new("UICorner")
+topBarCorner.CornerRadius = UDim.new(0, 8)
+topBarCorner.Parent = topBar
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(0, 250, 1, 0)
+title.Position = UDim2.new(0, 15, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "twix hub | PREMIUM MODULES"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextSize = 14
+title.Font = Enum.Font.GothamBold
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = topBar
+
+-- MODULE TAB PILL
+local modulePill = Instance.new("Frame")
+modulePill.Size = UDim2.new(0, 120, 0, 28)
+modulePill.Position = UDim2.new(0, 15, 0, 55)
+modulePill.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+modulePill.Parent = mainFrame
+
+local pillCorner = Instance.new("UICorner")
+pillCorner.CornerRadius = UDim.new(1, 0)
+pillCorner.Parent = modulePill
+
+local pillText = Instance.new("TextLabel")
+pillText.Size = UDim2.new(1, 0, 1, 0)
+pillText.BackgroundTransparency = 1
+pillText.Text = "◎ Dupe Module"
+pillText.TextColor3 = Color3.fromRGB(40, 40, 40)
+pillText.TextSize = 12
+pillText.Font = Enum.Font.GothamMedium
+pillText.Parent = modulePill
+
+-- CONTENT AREA
+local container = Instance.new("ScrollingFrame")
+container.Size = UDim2.new(1, -30, 1, -110)
+container.Position = UDim2.new(0, 15, 0, 95)
+container.BackgroundTransparency = 1
+container.ScrollBarThickness = 0
+container.Parent = mainFrame
+
+local layout = Instance.new("UIListLayout")
+layout.Padding = UDim.new(0, 8)
+layout.Parent = container
+
+-- LOCK OVERLAY (The Unlock System)
+local lockOverlay = Instance.new("Frame")
+lockOverlay.Name = "LockOverlay"
+lockOverlay.Size = UDim2.new(1, 0, 1, -40)
+lockOverlay.Position = UDim2.new(0, 0, 0, 40)
+lockOverlay.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+lockOverlay.BackgroundTransparency = 0.2
+lockOverlay.ZIndex = 10
+lockOverlay.Parent = mainFrame
+
+local lockCorner = Instance.new("UICorner")
+lockCorner.CornerRadius = UDim.new(0, 8)
+lockCorner.Parent = lockOverlay
+
+local unlockBtn = Instance.new("TextButton")
+unlockBtn.Size = UDim2.new(0, 200, 0, 50)
+unlockBtn.Position = UDim2.new(0.5, -100, 0.5, -25)
+unlockBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+unlockBtn.Text = "SUBSCRIBE TO UNLOCK"
+unlockBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+unlockBtn.Font = Enum.Font.GothamBold
+unlockBtn.TextSize = 14
+unlockBtn.ZIndex = 11
+unlockBtn.Parent = lockOverlay
+
+local unlockCorner = Instance.new("UICorner")
+unlockCorner.CornerRadius = UDim.new(0, 8)
+unlockCorner.Parent = unlockBtn
+
+-- HELPER FUNCTIONS
+local function createLabel(text)
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(1, 0, 0, 20)
+    label.BackgroundTransparency = 1
+    label.Text = text:upper()
+    label.TextColor3 = Color3.fromRGB(100, 100, 100)
+    label.TextSize = 11
+    label.Font = Enum.Font.GothamBold
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Parent = container
+end
+
+local function createButton(text, callback)
+    local btnFrame = Instance.new("TextButton")
+    btnFrame.Size = UDim2.new(1, 0, 0, 45)
+    btnFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    btnFrame.AutoButtonColor = false
+    btnFrame.Text = ""
+    btnFrame.Parent = container
+    
+    local bCorner = Instance.new("UICorner")
+    bCorner.CornerRadius = UDim.new(0, 6)
+    bCorner.Parent = btnFrame
+
+    local mText = Instance.new("TextLabel")
+    mText.Position = UDim2.new(0, 15, 0, 0)
+    mText.Size = UDim2.new(0.7, 0, 1, 0)
+    mText.BackgroundTransparency = 1
+    mText.Text = text
+    mText.TextColor3 = Color3.fromRGB(230, 230, 230)
+    mText.TextSize = 13
+    mText.Font = Enum.Font.GothamMedium
+    mText.TextXAlignment = Enum.TextXAlignment.Left
+    mText.Parent = btnFrame
+
+    btnFrame.MouseButton1Click:Connect(callback)
+end
+
+-- POPULATE FEATURES
+createLabel("Socials")
+createButton("YouTube: TwixHub", function() setclipboard("https://www.youtube.com/@TwixHub-n7m") end)
+
+createLabel("Exploit Features")
+createButton("Duplicate Held Item", function()
+    local char = player.Character
+    local tool = char and char:FindFirstChildOfClass("Tool")
+    if tool then
+        tool.Archivable = true
+        tool:Clone().Parent = player.Backpack
+    end
+end)
+
+-- UNLOCK LOGIC
+unlockBtn.MouseButton1Click:Connect(function()
+    -- Copy link and attempt to open (depending on executor)
+    if setclipboard then setclipboard("https://www.youtube.com/@TwixHub-n7m") end
+    
+    local countdown = 10
+    unlockBtn.AutoButtonColor = false
+    
+    while countdown > 0 do
+        unlockBtn.Text = "CHECKING... (" .. countdown .. "s)"
+        unlockBtn.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+        task.wait(1)
+        countdown = countdown - 1
+    end
+    
+    unlockBtn.Text = "UNLOCKED!"
+    unlockBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+    task.wait(1)
+    lockOverlay:Destroy() -- Removes the lock
+end)
+
+-- FIXED DRAGGING LOGIC
+local dragging, dragInput, dragStart, startPos
+topBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - dragStart
+        mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+    end
+end)
